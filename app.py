@@ -2,6 +2,7 @@ import asyncio
 import websockets
 from flask import Flask
 
+app = Flask(__name__)
 
 from conf.config import WS_HOST,WS_PORT
 from tasks.Quest import Quest
@@ -31,6 +32,7 @@ async def server(websocket, path):
 
 start_server = websockets.serve(server, WS_HOST, WS_PORT)
 asyncio.get_event_loop().run_until_complete(start_server)
+app.run(threaded=True, port=5000)
 print(f"WS server started on : ws://{WS_HOST}:{WS_PORT}")
 asyncio.get_event_loop().run_forever()
 
