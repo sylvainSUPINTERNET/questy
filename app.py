@@ -22,6 +22,7 @@ logging.info("Init schedule for removing quests")
 async def server(websocket, path):
     msg = await websocket.recv()
     dispatch(msg)
+    
 
     # print(f"< {name}")
     # greeting = f"Hello {name}!"
