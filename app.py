@@ -1,6 +1,6 @@
 import asyncio
 import websockets
-
+import redis
 
 from conf.config import WS_HOST,WS_PORT
 from tasks.Quest import Quest
@@ -15,6 +15,23 @@ scheduler.start()
 
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
+
+
+cache = redis.Redis(host='localhost', port=6379)
+
+def get_hit_count():
+    retries = 5
+    while True:
+        try:
+            return cache.incr('hits')
+        except redis.exceptions.ConnectionError as exc:
+            if retries == 0:
+                raise exc
+            retries -= 1
+            time.sleep(0.5)
+
+count = get_hit_count()
+print(count)
 
 # Check every minutes if some quests must be deleted in redis DB
 logging.info("Init schedule for removing quests")
