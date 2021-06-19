@@ -1,3 +1,7 @@
+
+ws://localhost:5000
+# Create quests in stream "quests"
+
 [{
     "type":"create_quest",
     "title":"Quest for Noob",
@@ -8,4 +12,29 @@
     ],
     "level_gain": 3,
     "requirements": ""
+},{
+    "type":"create_quest",
+    "title":"Quest for Noob 2",
+    "description": "This is quest for bik noob",
+    "rewards": [
+        "uuid1448",
+        "uuid454454"
+    ],
+    "level_gain": 3,
+    "requirements": ""
 }]
+
+
+# Delete stream "quests" "
+
+{
+    "type": "delete_quests"
+}
+
+# Delete quest by ID in stream "quests"
+
+{
+    "type": "delete_quest",
+    "id": "1624140716533-0"
+}
+

@@ -1,7 +1,28 @@
 from tasks.Quest import Quest
-from conf.redisConf import QUESTS_STREAM_NAME
+from conf.redisConf import QUESTS_STREAM_NAME, MAX_XREAD_COUNT
 import logging
 
+
+
+def delete_quest_stream(data,redis_instance):
+    print("delete quest by ID")
+    print(data["id"])
+    print(data["type"])
+
+
+def delete_quests_stream(data, redis_instance):
+    logging.info("Delete stream quests")
+    # Using incomplete ids 0 (could be $ for example here)
+    # XREAD COUNT 4 STREAMS quests 0 ( or $ for the latest result if you using READ BLOCK )
+    data_list_byte = redis_instance.xread({"quests":"0"},count=MAX_XREAD_COUNT)
+
+    ids = []
+    for quest in data_list_byte[0][1]:
+        ids.append(quest[0].decode('utf-8'))
+
+    logging.info(f"Quests collected ids to remove : {ids}")
+    redis_instance.xdel(QUESTS_STREAM_NAME, ids)
+    logging.info("Quests stream deleted with success")
 
 
 def create_quest(data, redis_instance):
@@ -26,10 +47,3 @@ def create_quest(data, redis_instance):
     logging.info(f"Quest added with success {str(keys_values)}")
     logging.info("Stream created with success.")
     
-
-# p = r.xadd("quests", fields, id='*', maxlen=None, approximate=True)
-# r.xadd("quests", fields, id='*', maxlen=None, approximate=True)
-
-# print(p)
-
-    # TODO save each quest to redis
