@@ -1,0 +1,1 @@
+QUESTS_STREAM_NAME="quests"

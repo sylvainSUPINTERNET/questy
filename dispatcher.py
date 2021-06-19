@@ -3,14 +3,14 @@ import logging
 from conf.wsMessageFormat import WS_TYPE_CREATE_QUEST
 from actions.actions import create_quest
 
-def dispatch(msg):
+def dispatch(msg, redis_instance):
     logging.info("Action received dispatch ...")
     try:
         json_data_array = json.loads(msg)
-    
+
         for data in json_data_array:
             if data["type"] == WS_TYPE_CREATE_QUEST :
-                create_quest(data=data)
+                create_quest(data=data, redis_instance=redis_instance)
             else:
                 logging.info("Provided type not exist")
     except Exception as e:

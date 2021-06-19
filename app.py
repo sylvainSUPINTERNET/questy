@@ -16,19 +16,15 @@ scheduler.start()
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 
-r = redis.Redis(host='localhost', port=6379, db=0)
-p = r.pubsub()
-p.psubscribe('hello*')
-r.publish('hello2', 'New Test Message 2')
+redis_instance = redis.Redis(host='localhost', port=6379, db=0)
 
-print(p.get_message())
 
 # Check every minutes if some quests must be deleted in redis DB
 logging.info("Init schedule for removing quests")
 
 async def server(websocket, path):
     msg = await websocket.recv()
-    dispatch(msg)
+    dispatch(msg, redis_instance=redis_instance)
     
 
     # print(f"< {name}")
