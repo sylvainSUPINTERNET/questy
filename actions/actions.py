@@ -5,9 +5,9 @@ import logging
 
 
 def delete_quest_stream(data,redis_instance):
-    print("delete quest by ID")
-    print(data["id"])
-    print(data["type"])
+    logging.info(f"Delete quest with ID : {data['id']} ... ")
+    redis_instance.xdel(QUESTS_STREAM_NAME, data['id'])
+    logging.info(f"Delete with success")
 
 
 def delete_quests_stream(data, redis_instance):
@@ -16,12 +16,9 @@ def delete_quests_stream(data, redis_instance):
     # XREAD COUNT 4 STREAMS quests 0 ( or $ for the latest result if you using READ BLOCK )
     data_list_byte = redis_instance.xread({"quests":"0"},count=MAX_XREAD_COUNT)
 
-    ids = []
     for quest in data_list_byte[0][1]:
-        ids.append(quest[0].decode('utf-8'))
-
-    logging.info(f"Quests collected ids to remove : {ids}")
-    redis_instance.xdel(QUESTS_STREAM_NAME, ids)
+        logging.info(f"Delete {quest[0].decode('utf-8')}")
+        redis_instance.xdel(QUESTS_STREAM_NAME, quest[0].decode("utf-8"))
     logging.info("Quests stream deleted with success")
 
 
@@ -31,7 +28,7 @@ def create_quest(data, redis_instance):
     keys_values = new_quest.__dict__
     for k,v in keys_values.items():
 
-            # Cleanup tuple format from WS payload (since Redis don't accept this type)
+        # Cleanup tuple format from WS payload (since Redis don't accept this type)
         if type(v) is tuple:
             tmp = ""
             for m in keys_values[k]:
