@@ -8,3 +8,5 @@ WS_TYPE_DELETE_QUEST: Final = "delete_quest"
 
 # Remove stream
 WS_TYPE_DELETE_QUESTS: Final = "delete_quests"
+
+QUESTS_AVAILABLE_MAX: Final = 5;

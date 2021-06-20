@@ -10,7 +10,7 @@ from tasks.jobs import job_delete_quests
 from apscheduler.schedulers.background import BackgroundScheduler
 
 scheduler = BackgroundScheduler()
-job_remove_old_quest = scheduler.add_job(job_delete_quests, 'interval', minutes=1)
+job_remove_old_quest = scheduler.add_job(job_delete_quests, 'interval', seconds=5)
 scheduler.start()
 
 import logging

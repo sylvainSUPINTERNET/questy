@@ -1,0 +1,22 @@
+
+[{
+    "type":"create_quest",
+    "title":"Quest for Noob",
+    "description": "This is quest for bik noob",
+    "rewards": [
+        "uuid1448",
+        "uuid454454"
+    ],
+    "level_gain": 3,
+    "requirements": ""
+},{
+    "type":"create_quest",
+    "title":"Quest for Noob 2",
+    "description": "This is quest for bik noob",
+    "rewards": [
+        "uuid1448",
+        "uuid454454"
+    ],
+    "level_gain": 3,
+    "requirements": ""
+}]

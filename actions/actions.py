@@ -14,7 +14,11 @@ def delete_quests_stream(data, redis_instance):
     logging.info("Delete stream quests")
     # Using incomplete ids 0 (could be $ for example here)
     # XREAD COUNT 4 STREAMS quests 0 ( or $ for the latest result if you using READ BLOCK )
-    data_list_byte = redis_instance.xread({"quests":"0"},count=MAX_XREAD_COUNT)
+    # Synchronous
+    data_list_byte = redis_instance.xread({"quests":"0"},count=MAX_XREAD_COUNT)   
+
+    # Asynchrnous
+    # data_list_byte = redis_instance.xread(streams={"quests": "$"}, count=MAX_XREAD_COUNT, block=0);
 
     for quest in data_list_byte[0][1]:
         logging.info(f"Delete {quest[0].decode('utf-8')}")
@@ -39,7 +43,7 @@ def create_quest(data, redis_instance):
                         tmp += str(z) + ",";
             keys_values[k] = tmp
 
-    redis_instance.xadd(QUESTS_STREAM_NAME, keys_values, id='*', maxlen=None, approximate=True)                
+    redis_instance.xadd(QUESTS_STREAM_NAME, keys_values, id='*', maxlen=None, approximate=True)      
         
     logging.info(f"Quest added with success {str(keys_values)}")
     logging.info("Stream created with success.")
